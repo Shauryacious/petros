@@ -11,58 +11,48 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const uploadPath = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath);
-}
 
-// Set up Multer storage with dynamic directory creation
+// Define the upload path
+const uploadPath = path.join(__dirname, 'uploads');
+
+// Set up Multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Extract the name from the request (assuming it's sent in the body)
-        const personName = req.body.name || 'default'; // Use a default name if not provided
-        const dir = path.join(uploadPath, personName); // Create a directory based on the person's name
-
-        // Create the directory if it doesn't exist
-        fs.mkdirSync(dir, { recursive: true });
-        
-        cb(null, dir); // Use the new directory
+        cb(null, uploadPath); // Use the uploads directory directly
     },
     filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `${uniqueSuffix}${path.extname(file.originalname)}`); // Keep original extension
+        cb(null, 'image.jpg'); // Always save as "image.jpg"
     }
 });
 
-// Update here
-//Ubj1uzVzanlq7aJY
-//rahulrathaur18898
+// Configure Multer with file type validation
 exports.upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-        const fileTypes = /jpeg|mp4|jpg|png|gif/;
+        const fileTypes = /jpeg|jpg|png|gif/; // Adjust to allow only image types
         const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
         const mimetype = fileTypes.test(file.mimetype);
 
         if (extname && mimetype) {
-            return cb(null, true);
+            cb(null, true);
         } else {
-            cb(new AppError('Error: File upload only supports the following filetypes - ' + fileTypes, 400), false);
+            cb(new AppError('Error: File upload only supports JPEG, JPG, PNG, and GIF file types', 400), false);
         }
-    },
+    }
 });
+
 exports.createPerson = async (req, res) => {
     try {
         const { name, age } = req.body;
         
-        // Get the paths of all uploaded images
-        const images = req.files.map(file => file.path); // Use req.files for multiple files
+        // Get the path of the uploaded image (always 'uploads/image.jpg')
+        const imagePath = path.join(uploadPath, 'image.jpg');
 
         // Create a new person record in the database
         const newPerson = await Person.create({
             name,
             age,
-            images, // Store the array of image paths
+            image: imagePath, // Store the image path
         });
 
         res.status(201).json({

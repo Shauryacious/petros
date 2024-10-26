@@ -68,6 +68,10 @@ function LoginPage() {
     signIn("google", { callbackUrl: "/" }); // This triggers the Google login flow
   };
 
+  function forgotpassword(){
+    
+  }
+
   return (
     <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-black">
       <div className="relative z-10 p-8 bg-[#0d0d12] rounded-md shadow-lg w-full max-w-md border border-[#2a2a3d]">
@@ -122,7 +126,10 @@ function LoginPage() {
         </div>
 
         <div className="mt-6 flex justify-center">
+          <div>
           <p className="text-neutral-400">Don't have an account? </p>
+          <p className="text-neutral-400" style={{textAlign:'center',paddingTop:'30px',}} onClick={forgotpassword}>Forgot Password? </p>
+          </div>
           <Link href="/signup">
             <span className="ml-2 text-neutral-300 hover:text-white cursor-pointer">
               Sign Up
