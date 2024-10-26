@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
@@ -26,7 +27,9 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="h-screen w-full flex items-center justify-center bg-black">
+    <div>
+      <Navbar />
+    <div className="h-screen w-full flex items-center justify-center bg-black" style={{marginTop:'100px',marginBottom:'150px'}}>
       <div className="relative z-10 p-8 bg-[#0d0d12] rounded-md shadow-lg w-full max-w-md border border-[#2a2a3d]">
         <h1 className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-b from-neutral-300 to-neutral-500 mb-8">
           Contact Us
@@ -107,6 +110,8 @@ export default function ContactForm() {
           </button>
         </form>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }

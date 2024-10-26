@@ -1,4 +1,5 @@
 'use client'; // Ensure the component is client-side
+import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import React, { useState } from 'react';
 
@@ -71,6 +72,7 @@ const FAQPage = () => {
                 ))}
             </div>
         </div>
+        <Footer />
         </div>
     );
 };
