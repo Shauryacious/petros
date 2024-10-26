@@ -5,7 +5,7 @@ const Person = require("./../models/imageData");
 //! UTILS
 const Razorpay = require('razorpay')
 const AppError = require("./../utils/appError");
-const catchAsync = require("./../utils/catchAsync");
+const catchAsync = require("../utils/catchAsync.js");
 const Email = require("./../utils/email");
 const multer = require('multer');
 const path = require('path');
