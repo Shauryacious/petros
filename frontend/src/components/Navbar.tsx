@@ -10,10 +10,8 @@ function Navbar({ className }: { className?: string }) {
 
   const menuItems = [
     { href: "/", label: "Home" },
-    { href: "/uploadData", label: "Add Person" },
-    { href: "/Buy-glass", label: "Buy" },
     { href: "/faq", label: "FAQs" },
-    { href: "/contact", label: "Contact Us" },
+    { href: "/contactus", label: "Contact Us" },
     { href: "/about", label: "About" },
   ];
 
