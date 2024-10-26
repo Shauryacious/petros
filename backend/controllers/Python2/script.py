@@ -43,7 +43,7 @@ def compress_and_encode_image(image, scale_percent=50):  # Default scale to 50%
     resized_image = cv2.resize(image, (width, height))
 
     # Compress the image using JPEG encoding
-    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 75]  # Lower quality for more compression
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]  # Lower quality for more compression
     _, img_encoded = cv2.imencode('.jpg', resized_image, encode_param)  # Use JPEG format
     img_base64 = base64.b64encode(img_encoded).decode('utf-8')
     return img_base64

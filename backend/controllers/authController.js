@@ -46,12 +46,12 @@ exports.upload = multer({
 exports.createPerson = async (req, res) => {
     try {
         // Define the path to the image
-        console.log('hello')
         const imagePath = path.join(__dirname, 'uploads', 'image.jpg'); // Replace with the actual image file name you want to use
         const file = path.join(__dirname, 'Python2', 'script.py'); 
+        
         // Construct the command to run the Python script
         const command = `python ${file} --image ${imagePath}`;
-        console.log(command);
+        
         // Execute the command
         exec(command, (error, stdout, stderr) => {
             if (error) {
@@ -72,8 +72,11 @@ exports.createPerson = async (req, res) => {
 
             // Handle the output from the Python script
             try {
-                console.log(stdout);
-                const jsonOutput = JSON.parse(stdout); // Assuming the Python script outputs JSON
+                // Split stdout into lines and ignore the first two lines
+                const outputLines = stdout.split('\n').slice(3).join('\n');
+                
+                // Attempt to parse the remaining output as JSON
+                const jsonOutput = JSON.parse(outputLines); // Assuming the Python script outputs valid JSON
                 return res.status(201).json({
                     status: 'success',
                     data: {
@@ -81,6 +84,7 @@ exports.createPerson = async (req, res) => {
                     },
                 });
             } catch (parseError) {
+                console.error(`Parsing error: ${parseError.message}`);
                 return res.status(500).json({
                     status: 'fail',
                     message: 'Error parsing Python output',
