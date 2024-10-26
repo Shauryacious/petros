@@ -32,7 +32,6 @@ body {
   }
 }
 
-
 .button-wrapper {
   position: relative;
 }
@@ -45,8 +44,15 @@ body {
   text-transform: uppercase;
   letter-spacing: 2px;
   padding: 16px 32px;
-  background: linear-gradient(90deg, #8B4513 0%, #A0522D 25%, #D2691E 50%, #8B0000 75%, #5B342E 100%);
-  color: #FFF8DC; /* Light ivory color for contrast on dark background */
+  background: linear-gradient(
+    90deg,
+    #8b4513 0%,
+    #a0522d 25%,
+    #d7620e 50%,
+    #8b0000 75%,
+    #5b342e 100%
+  );
+  color: #fff8dc; /* Light ivory color for contrast on dark background */
   border-radius: 50px;
   border: 0px;
   cursor: pointer;
@@ -61,7 +67,7 @@ body {
   left: 0;
   width: calc(100% + 4px);
   height: calc(100% + 4px);
-  background: #8B0000; /* Dark red background */
+  background: #8b0000; /* Dark red background */
   background-size: 600% 600%;
   border-radius: 50px;
   animation: AnimateBorder 6s ease infinite;
@@ -81,8 +87,16 @@ body {
 }
 
 @keyframes AnimateBorder {
-  0% { box-shadow: 2px 2px 40px rgba(255, 230, 230, 0.7); } /* Brick red */
-  50% { box-shadow: 2px 2px 40px rgba(255, 134, 134, 0.8); } /* Lighter red */
-  75% { box-shadow: 2px 2px 40px rgba(255, 245, 237, 0.7); } /* Saddle brown */
-  100% { box-shadow: 2px 2px 40px rgba(255, 96, 96, 0.8); } /* Deep red */
+  0% {
+    box-shadow: 2px 2px 40px rgba(255, 230, 230, 0.7);
+  } /* Brick red */
+  50% {
+    box-shadow: 2px 2px 40px rgba(255, 134, 134, 0.8);
+  } /* Lighter red */
+  75% {
+    box-shadow: 2px 2px 40px rgba(255, 245, 237, 0.7);
+  } /* Saddle brown */
+  100% {
+    box-shadow: 2px 2px 40px rgba(255, 96, 96, 0.8);
+  } /* Deep red */
 }
