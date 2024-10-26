@@ -1,5 +1,0 @@
-#! dependencies
-/node_modules
-#! Enviornment variables
-*.env
-config.env
