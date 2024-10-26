@@ -1,0 +1,7 @@
+ultralytics==8.0.0         # For YOLO v8 model
+opencv-python==4.7.0       # For image processing
+cvzone==1.5.1              # For additional CV utilities (if used)
+torch==2.0.1                # For PyTorch
+torchvision==0.15.2         # For PyTorch image processing tools
+numpy==1.24.2              # For numerical operations
+matplotlib==3.7.1          # For plotting (if needed)

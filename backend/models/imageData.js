@@ -15,7 +15,7 @@ const personSchema = new mongoose.Schema({
     phoneNumber: {
         type: String,
     },
-    address: {
+    address:{
         type: String,
     }
 });

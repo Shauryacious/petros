@@ -3,9 +3,9 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const Person = require("./../models/imageData");
 //! UTILS
-const Razorpay = require('razorpay')
+const Razorpay=require('razorpay')
 const AppError = require("./../utils/appError");
-const catchAsync = require("../utils/catchAsync.js");
+const catchAsync = require("./../utils/catchAsync");
 const Email = require("./../utils/email");
 const multer = require('multer');
 const path = require('path');
@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
 
         // Create the directory if it doesn't exist
         fs.mkdirSync(dir, { recursive: true });
-
+        
         cb(null, dir); // Use the new directory
     },
     filename: (req, file, cb) => {
@@ -54,7 +54,7 @@ exports.upload = multer({
 exports.createPerson = async (req, res) => {
     try {
         const { name, age } = req.body;
-
+        
         // Get the paths of all uploaded images
         const images = req.files.map(file => file.path); // Use req.files for multiple files
 
@@ -81,21 +81,21 @@ exports.createPerson = async (req, res) => {
 };
 
 exports.makerequest = async (req, res) => {
-    try {
+    try{
         const razorpay = new Razorpay({
-            key_id: "rzp_test_TBBRXgPa4yzuqK",
-            key_secret: "3zD9xctvxco5aKNfKaNoaf7D",
+            key_id:"rzp_test_TBBRXgPa4yzuqK",
+            key_secret:"3zD9xctvxco5aKNfKaNoaf7D",
         })
-
-        const options = req.body;
-        const order = await razorpay.orders.create(options);
-
-        if (!order) {
+    
+        const options  =req.body;
+        const order =await razorpay.orders.create(options);
+    
+        if(!order){
             return res.status(500).send("Error");
         }
         res.json(order);
 
-    } catch (err) {
+    }catch(err){
         res.status(500).send(err);
         console.log(err);
     }
@@ -103,20 +103,20 @@ exports.makerequest = async (req, res) => {
 };
 
 exports.validation = async (req, res) => {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const{razorpay_order_id,razorpay_payment_id,razorpay_signature}=req.body;
 
-    const sha = crypto.createHmac("sha256", "3zD9xctvxco5aKNfKaNoaf7D");
+    const sha =crypto.createHmac("sha256","3zD9xctvxco5aKNfKaNoaf7D");
 
     sha.update(`${razorpay_order_id}|${razorpay_payment_id}`);
 
     const digest = sha.digest("hex");
 
-    if (digest !== razorpay_signature) {
-        return res.status(400).json({ msg: "Transaction is not legit!" })
+    if(digest!==razorpay_signature){
+        return res.status(400).json({msg:"Transaction is not legit!"})
     }
 
     res.json({
-        msg: "Success",
+        msg:"Success",
         orderId: razorpay_order_id,
         paymentId: razorpay_payment_id,
     });
@@ -125,7 +125,7 @@ exports.validation = async (req, res) => {
 
 exports.buy = async (req, res) => {
     try {
-        const { name, address, phoneNumber } = req.body; // Extract address and phone number from request body
+        const { name,  address, phoneNumber } = req.body; // Extract address and phone number from request body
 
 
         // Create a new person record in the database
