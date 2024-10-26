@@ -43,7 +43,7 @@ def compress_and_encode_image(image, scale_percent=50):  # Default scale to 50%
     resized_image = cv2.resize(image, (width, height))
 
     # Compress the image using JPEG encoding
-    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 50]  # Lower quality for more compression
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 75]  # Lower quality for more compression
     _, img_encoded = cv2.imencode('.jpg', resized_image, encode_param)  # Use JPEG format
     img_base64 = base64.b64encode(img_encoded).decode('utf-8')
     return img_base64
@@ -78,7 +78,7 @@ def detect_spots(image):
 def draw_spots_on_image(image, circles):
     # Create a copy of the image to draw spots
     output_image = image.copy()
-
+    
     if circles is not None:
         for (x, y, r) in circles:
             # Draw the circle in the output image
@@ -116,7 +116,58 @@ def main():
     detected_circle_count, circles = detect_spots(original_image)
 
     # Draw detected spots (circles) on the original image
-    output_image = draw_spots_on_image(original_image, circles)
+    spots_image = draw_spots_on_image(original_image, circles)
+
+    # Convert to LAB color space for segmentation
+    lab_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2LAB)
+
+    min_area = 1500  # Minimum area threshold for filtering
+    contours_list = []
+    areas = []
+
+    # Define refined color ranges
+    color_ranges = [
+        ((20, 120, 100), (240, 255, 255)),
+        ((0, 0, 0), (25, 110, 110)),
+        ((100, 80, 80), (140, 255, 255)),
+    ]
+
+    # Loop through color ranges to find and process each region
+    for lower, upper in color_ranges:
+        mask = cv2.inRange(lab_image, lower, upper)
+
+        # Apply morphological operations to reduce noise
+        kernel = np.ones((5, 5), np.uint8)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+
+        # Find contours
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        filtered_contours = [cnt for cnt in contours if cv2.contourArea(cnt) >= min_area]
+        contours_list.extend(filtered_contours)
+
+        # Calculate area for each filtered contour
+        for contour in filtered_contours:
+            area = cv2.contourArea(contour)
+            areas.append(area)
+
+    total_segmented_area = sum(areas)
+    area_percentages_segmented = [(area / total_segmented_area) * 100 for area in areas]
+
+    filtered_contours_list = []
+    filtered_areas = []
+    filtered_area_percentages = []
+
+    for contour, area, percentage in zip(contours_list, areas, area_percentages_segmented):
+        if percentage > 1 and area < 1040397:
+            filtered_contours_list.append(contour)
+            filtered_areas.append(area)
+            filtered_area_percentages.append(percentage)
+
+    # Generate distinct colors for each region
+    def generate_random_color():
+        return tuple(random.randint(0, 255) for _ in range(3))
+
+    colors = [generate_random_color() for _ in range(len(filtered_contours_list))]
 
     # Create JSON output dictionary
     json_output = {}
@@ -124,24 +175,48 @@ def main():
     # Save the annotated image as base64
     json_output['annotated_image'] = compress_and_encode_image(annotated_img)
 
-    # Add the number of detected spots (circles) to the JSON output
-    json_output['number_of_spots'] = detected_circle_count
+    # Save the spots detection image as base64
+    json_output['spots_image'] = compress_and_encode_image(spots_image)
 
-    # Convert the segmented image with spots to base64
+    # Draw contours on the image
+    output_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
+    for contour, color in zip(filtered_contours_list, colors):
+        bgr_color = (color[2], color[1], color[0])
+        cv2.drawContours(output_image, [contour], -1, bgr_color, 2)
+
+    # Convert the segmented image to base64
     json_output['segmented_image'] = compress_and_encode_image(output_image)
 
-    # Plot and convert the spot detection image to base64
-    plt.figure(figsize=(6, 6))
-    plt.imshow(cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB))
-    plt.title(f"Detection of Spots - {detected_circle_count} circles found")
-    plt.axis("off")
+    # Create plot for area percentages (bar chart)
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.bar([f"Region {i + 1}" for i in range(len(filtered_areas))],
+           filtered_area_percentages, color=[(r / 255, g / 255, b / 255) for r, g, b in colors])
+    ax.set_title("Percentage Area Occupied by Each Mineral Region")
+    ax.set_xlabel("Mineral Regions")
+    ax.set_ylabel("Percentage Area (%)")
+    ax.set_xticks(range(len(filtered_areas)))
+    ax.set_xticklabels([f"Region {i + 1}" for i in range(len(filtered_areas))], rotation=45)
 
-    # Convert the plot to base64 and add to JSON output
-    fig = plt.gcf()  # Get the current figure
-    json_output['spot_detection_plot'] = plot_to_base64(fig)
+    # Convert the plot to base64 and add to the JSON output
+    json_output['bar_chart'] = plot_to_base64(fig)
 
     # Close the plot to avoid memory leak
     plt.close(fig)
+
+    # Plot and convert the spot detection plot to base64
+    plt.figure(figsize=(6, 6))
+    plt.imshow(cv2.cvtColor(spots_image, cv2.COLOR_BGR2RGB))
+    plt.title(f"Detection of Spots - {detected_circle_count} circles found")
+    plt.axis("off")
+
+    fig_spots = plt.gcf()  # Get the current figure
+    json_output['spot_detection_plot'] = plot_to_base64(fig_spots)
+
+    # Close the plot to avoid memory leak
+    plt.close(fig_spots)
+
+    # Add the number of detected spots (circles) to the JSON output
+    json_output['number_of_spots'] = detected_circle_count
 
     # Output JSON with base64 images and spot data
     print(json.dumps(json_output, indent=4))
