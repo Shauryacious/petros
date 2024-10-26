@@ -10,6 +10,7 @@ const Email = require("./../utils/email");
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const { exec } = require('child_process');
 
 
 // Define the upload path
@@ -41,25 +42,49 @@ exports.upload = multer({
     }
 });
 
+
 exports.createPerson = async (req, res) => {
     try {
-        const { name, age } = req.body;
-        
-        // Get the path of the uploaded image (always 'uploads/image.jpg')
-        const imagePath = path.join(uploadPath, 'image.jpg');
+        // Define the path to the image
+        console.log('hello')
+        const imagePath = path.join(__dirname, 'uploads', 'image.jpg'); // Replace with the actual image file name you want to use
+        const file = path.join(__dirname, 'python', 'detect_yolo.py'); 
+        // Construct the command to run the Python script
+        const command = `python ${file} ${imagePath}`;
+        console.log(command);
+        // Execute the command
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error executing command: ${error.message}`);
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error executing Python script',
+                });
+            }
 
-        // Create a new person record in the database
-        const newPerson = await Person.create({
-            name,
-            age,
-            image: imagePath, // Store the image path
-        });
+            if (stderr) {
+                console.error(`Python error: ${stderr}`);
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error in Python script',
+                });
+            }
 
-        res.status(201).json({
-            status: 'success',
-            data: {
-                newPerson,
-            },
+            // Handle the output from the Python script
+            try {
+                const jsonOutput = JSON.parse(stdout); // Assuming the Python script outputs JSON
+                return res.status(201).json({
+                    status: 'success',
+                    data: {
+                        pythonOutput: jsonOutput, // Include output from Python
+                    },
+                });
+            } catch (parseError) {
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error parsing Python output',
+                });
+            }
         });
     } catch (error) {
         console.error(error);
