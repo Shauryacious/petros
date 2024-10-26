@@ -145,7 +145,7 @@ def main():
 
     # Save the annotated image as base64
     _, img_encoded = cv2.imencode('.png', annotated_img)
-    json_output['annotated_image'] = base64.b64encode(img_encoded).decode('utf-8')
+    # json_output['annotated_image'] = base64.b64encode(img_encoded).decode('utf-8')
 
     # Draw contours on the image
     output_image = image_rgb.copy()
@@ -156,7 +156,7 @@ def main():
     # Convert image to base64
     output_image_rgb = cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB)
     _, img_encoded = cv2.imencode('.png', output_image_rgb)
-    json_output['segmented_image'] = base64.b64encode(img_encoded).decode('utf-8')
+    # json_output['segmented_image'] = base64.b64encode(img_encoded).decode('utf-8')
 
     # Create plot for area percentages (bar chart)
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -175,7 +175,7 @@ def main():
     plt.close(fig)
 
     # Add the number of detected spots (circles) to the JSON output
-    json_output['number_of_spots'] = detected_circle_count
+    # json_output['number_of_spots'] = detected_circle_count
 
     # Output JSON with base64 images and spot data
     print(json.dumps(json_output, indent=4))

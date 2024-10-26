@@ -48,9 +48,9 @@ exports.createPerson = async (req, res) => {
         // Define the path to the image
         console.log('hello')
         const imagePath = path.join(__dirname, 'uploads', 'image.jpg'); // Replace with the actual image file name you want to use
-        const file = path.join(__dirname, 'python', 'detect_yolo.py'); 
+        const file = path.join(__dirname, 'Python2', 'script.py'); 
         // Construct the command to run the Python script
-        const command = `python ${file} ${imagePath}`;
+        const command = `python ${file} --image ${imagePath}`;
         console.log(command);
         // Execute the command
         exec(command, (error, stdout, stderr) => {
@@ -72,6 +72,7 @@ exports.createPerson = async (req, res) => {
 
             // Handle the output from the Python script
             try {
+                console.log(stdout);
                 const jsonOutput = JSON.parse(stdout); // Assuming the Python script outputs JSON
                 return res.status(201).json({
                     status: 'success',

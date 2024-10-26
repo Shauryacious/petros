@@ -111,6 +111,7 @@ const PdfGenerator = () => {
           <h1 className="text-4xl font-bold mb-4">Your Content Title</h1>
           <p className="mb-2">This is the content that will appear in the PDF.</p>
           <p className="mb-4">Add more content here as needed.</p>
+          <img src='C:\Users\iampe\Desktop\logg.png' alt='logo' />
         </div>
 
         <div className="max-w-full overflow-x-auto mb-4">
