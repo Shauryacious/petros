@@ -8,6 +8,7 @@ const CreateUser = () => {
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
     const [images, setImages] = useState([]); // Changed to handle multiple images
+    const [imagePreviews, setImagePreviews] = useState([]); // State for image previews
     const [message, setMessage] = useState('');
     const [messageColor, setMessageColor] = useState('');
     const router = useRouter();
@@ -42,24 +43,26 @@ const CreateUser = () => {
             const data = await response.json();
             if (response.ok) {
                 setMessageColor('green'); // Set the message color to green for success
-                setMessage('User created successfully!');
-                // Reset the form
-                setName('');
-                setAge('');
-                setImages([]); // Reset images
+                setMessage('Analysis successfully!');
+                
             } else {
                 setMessageColor('red'); // Set the message color to red for errors
-                setMessage(data.message || 'Error creating user');
+                setMessage(data.message || 'Error occurred');
             }
         } catch (error) {
             console.error('Error:', error);
             setMessageColor('red'); // Set the message color to red for errors
-            setMessage('Error creating user');
+            setMessage('Error occurred');
         }
     };
 
     const handleImageChange = (e) => {
-        setImages([...e.target.files]); // Convert FileList to an array
+        const selectedImages = [...e.target.files];
+        setImages(selectedImages); // Convert FileList to an array
+
+        // Create image previews
+        const previews = selectedImages.map((file) => URL.createObjectURL(file));
+        setImagePreviews(previews); // Set previews state
     };
 
     // Remove the message after 3 seconds
@@ -92,6 +95,18 @@ const CreateUser = () => {
                             name="images" // Set the name attribute to match your Multer configuration
                             className="mt-1 block w-full p-2 border border-[#3a3a52] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
                         />
+
+                        {/* Display Image Previews */}
+                        <div className="flex flex-wrap mt-4">
+                            {imagePreviews.map((preview, index) => (
+                                <img 
+                                    key={index} 
+                                    src={preview} 
+                                    alt={`Preview ${index}`} 
+                                    className="w-20 h-20 object-cover rounded-md mr-2 mb-2"
+                                />
+                            ))}
+                        </div>
 
                         <button
                             type="submit"
