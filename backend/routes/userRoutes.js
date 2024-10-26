@@ -8,7 +8,7 @@ const authController = require("./../controllers/authController");
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 
-// Update the create route to handle multiple images
+// Update the create route to handle multiple images upload
 router.post('/create', authController.upload.array('images', 1), authController.createPerson);
 router.post('/buy', authController.buy);
 
