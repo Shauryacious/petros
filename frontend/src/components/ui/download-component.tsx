@@ -1,52 +1,45 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import { isWindows, isMacOs } from 'react-device-detect';
+"use client";
+import React, { useState, useEffect } from "react";
+import { isWindows, isMacOs } from "react-device-detect";
 
 const DownloadComponent = () => {
   const [platform, setPlatform] = useState(null);
 
   useEffect(() => {
     if (isWindows) {
-      setPlatform('windows');
+      setPlatform("windows");
     } else if (isMacOs) {
-      setPlatform('mac');
+      setPlatform("mac");
     } else {
-      setPlatform('unsupported');
+      setPlatform("unsupported");
     }
   }, []); // Runs only once after component mounts
 
   return (
     <div>
-      {platform === 'windows' && (
+      {platform === "windows" && (
         <div>
-          <div
-           
-            style={{ color: 'black' }}
-          >
+          <div style={{ color: "black" }}>
             <i
               className="fa-brands fa-windows"
-              style={{ paddingRight: '20px', color: 'black' }}
+              style={{ paddingRight: "20px", color: "black" }}
             ></i>
-            Classify Your Rock
+            Analyse Your Rock
           </div>
         </div>
       )}
-      {platform === 'mac' && (
+      {platform === "mac" && (
         <div>
-          <div
-           
-            target="_blank"
-            style={{ color: 'black' }}
-          >
+          <div target="_blank" style={{ color: "black" }}>
             <i
               className="fa-brands fa-apple"
-              style={{ paddingRight: '20px', color: 'black' }}
+              style={{ paddingRight: "20px", color: "black" }}
             ></i>
-           Classify Your Rock
+            Analyse Your Rock
           </div>
         </div>
       )}
-      {platform === 'unsupported' && (
+      {platform === "unsupported" && (
         <div>Sorry, your operating system is not supported for download.</div>
       )}
     </div>

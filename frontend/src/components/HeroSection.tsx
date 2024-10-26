@@ -136,19 +136,18 @@ function HeroSection() {
           className="p-4 relative z-10 text-center"
           style={{ position: "absolute", top: "-50px", left: "150px" }}
         >
-          <h1 className="mt-60 mb-5 md:mt-60 text-2xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+          <h1 className="mt-60 mb-2 md:mt-60 text-2xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
             Welcome to
           </h1>
-          <h1 className=" p-3 mt-20 md:mt-0 text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
-            Petros
+          <h1 className="p-3 mt-2 md:mt-0 text-6xl md:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400">
+            Pétros Analysis
           </h1>
           <h1 className=" font-normal text-base md:text-lg text-neutral-300 max-w-lg mx-auto">
-          Analyze. Classify. Report.
+            Analyze - Classify - Report.
           </h1>
           <h1 className="mt-4 font-normal text-base md:text-2xl text-neutral-300 mx-auto">
-            <b>RockScope: Precision Analysis for Rock Classification.</b>
+            <b>Analyse Rock Samples with Advanced AI Model</b>
           </h1>
-          <h3>Analyze, Classify, and Report Rock Samples with Advanced Image & Video Processing</h3>
           {/* <div className="mb-4 mt-14 p-4 align-middle">
           {mainButtons.map((button, index) => (
             <Link key={index} className="m-4" href={button.href}>
@@ -159,18 +158,16 @@ function HeroSection() {
             </Link>
           ))}
         </div> */}
-         <a href="/uploadData" >
-          <div style={{ display: "flex", justifyContent: "center" }}>
-
-           
-            <button
-              type="button"
-              className="homebutton"
-              style={{ marginTop: "40px" }}
-            >
-              <DownloadComponent />
-            </button>
-          </div>
+          <a href="/uploadData">
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button
+                type="button"
+                className="homebutton"
+                style={{ marginTop: "40px" }}
+              >
+                <DownloadComponent />
+              </button>
+            </div>
           </a>
         </div>
       </div>
