@@ -35,6 +35,21 @@ def plot_to_base64(fig):
     return img_base64
 
 
+# Function to compress and encode an image to Base64
+def compress_and_encode_image(image, scale_percent=50):  # Default scale to 50%
+    # Resize the image
+    width = int(image.shape[1] * scale_percent / 100)
+    height = int(image.shape[0] * scale_percent / 100)
+    resized_image = cv2.resize(image, (width, height))
+
+    # Compress the image using JPEG encoding
+    encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 75]  # Lower quality for more compression
+    _, img_encoded = cv2.imencode('.jpg', resized_image, encode_param)  # Use JPEG format
+    img_base64 = base64.b64encode(img_encoded).decode('utf-8')
+    return img_base64
+
+
+
 # Function to detect spots (circles) in the image
 def detect_spots(image):
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -43,7 +58,7 @@ def detect_spots(image):
     # Use HoughCircles to detect circles
     circles = cv2.HoughCircles(
         blurred_image,
-        cv2.HOUGH_GRADIENT,
+        cv2.HOUGH_GRADIENT,  # Corrected constant name
         dp=1.1,  # Inverse ratio of accumulator resolution to image resolution
         minDist=20,  # Minimum distance between detected circles
         param1=82,  # Canny edge detection threshold
@@ -58,6 +73,7 @@ def detect_spots(image):
         detected_circle_count = len(circles)
 
     return detected_circle_count, circles
+
 
 
 def main():
@@ -77,19 +93,17 @@ def main():
         raise ValueError(f"Error: Unable to load image from {image_path}. Check the path.")
 
     # YOLO prediction
-    def predict_image(model, img_path):
-        img = cv2.imread(img_path)
+    def predict_image(model, img):
         results = model.predict(source=img, conf=0.25)  # Adjust confidence as needed
         annotated_img = results[0].plot()
         return annotated_img
 
-    annotated_img = predict_image(model, image_path)
+    annotated_img = predict_image(model, original_image)
 
     # Spot detection (circles)
     detected_circle_count, circles = detect_spots(original_image)
 
     # Convert to LAB color space for segmentation
-    image_rgb = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
     lab_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2LAB)
 
     min_area = 1500  # Minimum area threshold for filtering
@@ -144,19 +158,16 @@ def main():
     json_output = {}
 
     # Save the annotated image as base64
-    _, img_encoded = cv2.imencode('.png', annotated_img)
-    json_output['annotated_image'] = base64.b64encode(img_encoded).decode('utf-8')
+    json_output['annotated_image'] = compress_and_encode_image(annotated_img)
 
     # Draw contours on the image
-    output_image = image_rgb.copy()
+    output_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB)
     for contour, color in zip(filtered_contours_list, colors):
         bgr_color = (color[2], color[1], color[0])
         cv2.drawContours(output_image, [contour], -1, bgr_color, 2)
 
-    # Convert image to base64
-    output_image_rgb = cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB)
-    _, img_encoded = cv2.imencode('.png', output_image_rgb)
-    json_output['segmented_image'] = base64.b64encode(img_encoded).decode('utf-8')
+    # Convert the segmented image to base64
+    json_output['segmented_image'] = compress_and_encode_image(output_image)
 
     # Create plot for area percentages (bar chart)
     fig, ax = plt.subplots(figsize=(10, 6))
