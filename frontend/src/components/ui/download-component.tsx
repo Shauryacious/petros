@@ -40,7 +40,7 @@ const DownloadComponent = () => {
         </div>
       )}
       {platform === "unsupported" && (
-        <div>Sorry, your operating system is not supported for download.</div>
+        <div>Analyse Your Rock</div>
       )}
     </div>
   );
