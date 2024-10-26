@@ -79,33 +79,9 @@ const CreateUser = () => {
         <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-black">
             <div className="relative z-10 p-8 bg-[#0d0d12] rounded-md shadow-lg w-full max-w-md border border-[#2a2a3d]">
                 <h1 className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-b from-neutral-300 to-neutral-500 mb-8">
-                    Create User
+                    Classify Rocks
                 </h1>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                    <div>
-                        <label className="block text-sm font-medium text-neutral-400">
-                            Name:
-                        </label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            className="w-full px-4 py-2 rounded-md bg-[#1b1b25] text-white border border-[#3a3a52] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-neutral-400">
-                            Age:
-                        </label>
-                        <input
-                            type="number"
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)}
-                            required
-                            className="w-full px-4 py-2 rounded-md bg-[#1b1b25] text-white border border-[#3a3a52] focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
-                        />
-                    </div>
                     <input
                         type="file"
                         accept="image/*"
@@ -120,7 +96,7 @@ const CreateUser = () => {
                         type="submit"
                         className="w-full h-12 inline-flex items-center justify-center rounded-md border border-[#2a2a3d] bg-[linear-gradient(110deg,#0d0d12,45%,#1a1a22,55%,#0d0d12)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors hover:text-white"
                     >
-                        Create User
+                        upload data
                     </button>
                 </form>
                 
