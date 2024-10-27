@@ -100,6 +100,63 @@ exports.createPerson = async (req, res) => {
     }
 };
 
+exports.createPerson2 = async (req, res) => {
+    try {
+        // Define the path to the image
+        const imagePath = path.join(__dirname, 'uploads', 'image.jpg'); // Replace with the actual image file name you want to use
+        const file = path.join(__dirname, 'Python2', 'script.py'); 
+        
+        // Construct the command to run the Python script
+        const command = `python ${file} --image ${imagePath}`;
+        
+        // Execute the command
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error executing command: ${error.message}`);
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error executing Python script',
+                });
+            }
+
+            if (stderr) {
+                console.error(`Python error: ${stderr}`);
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error in Python script',
+                });
+            }
+
+            // Handle the output from the Python script
+            try {
+                // Split stdout into lines and ignore the first two lines
+                const outputLines = stdout.split('\n').slice(3).join('\n');
+                
+                // Attempt to parse the remaining output as JSON
+                const jsonOutput = JSON.parse(outputLines); // Assuming the Python script outputs valid JSON
+                return res.status(201).json({
+                    status: 'success',
+                    data: {
+                        pythonOutput: jsonOutput, // Include output from Python
+                    },
+                });
+            } catch (parseError) {
+                console.error(`Parsing error: ${parseError.message}`);
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error parsing Python output',
+                });
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            status: 'fail',
+            message: 'An error occurred while creating the person',
+        });
+    }
+};
+
 exports.makerequest = async (req, res) => {
     try{
         const razorpay = new Razorpay({

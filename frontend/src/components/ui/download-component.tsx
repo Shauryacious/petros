@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { isWindows, isMacOs } from "react-device-detect";
 
-const DownloadComponent = () => {
+const DownloadComponent = (props) => {
   const [platform, setPlatform] = useState(null);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const DownloadComponent = () => {
               className="fa-brands fa-windows"
               style={{ paddingRight: "20px", color: "black" }}
             ></i>
-            Analyse Your Rock
+           {props.name}
           </div>
         </div>
       )}
@@ -35,12 +35,12 @@ const DownloadComponent = () => {
               className="fa-brands fa-apple"
               style={{ paddingRight: "20px", color: "black" }}
             ></i>
-            Analyse Your Rock
+            {props.name}
           </div>
         </div>
       )}
       {platform === "unsupported" && (
-        <div>Analyse Your Rock</div>
+        <div>{props.name}</div>
       )}
     </div>
   );

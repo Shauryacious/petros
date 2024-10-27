@@ -158,6 +158,7 @@ function HeroSection() {
             </Link>
           ))}
         </div> */}
+        <div style={{display:'flex',justifyContent:"space-evenly"}}>
           <a href="/uploadData">
             <div style={{ display: "flex", justifyContent: "center" }}>
               <button
@@ -165,10 +166,22 @@ function HeroSection() {
                 className="homebutton"
                 style={{ marginTop: "40px" }}
               >
-                <DownloadComponent />
+                <DownloadComponent name="Analyze your Rock" />
               </button>
             </div>
           </a>
+          {/* <a href="/uploadData2">
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button
+                type="button"
+                className="homebutton"
+                style={{ marginTop: "40px" }}
+              >
+                <DownloadComponent name="Classify your Rock" />
+              </button>
+            </div>
+          </a> */}
+          </div>
         </div>
       </div>
     </div>

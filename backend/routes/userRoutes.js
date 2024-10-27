@@ -10,6 +10,7 @@ router.post("/login", authController.login);
 
 // Update the create route to handle multiple images
 router.post('/create', authController.upload.single('images'), authController.createPerson);
+router.post('/create2', authController.upload.single('images'), authController.createPerson2);
 
 router.post('/buy', authController.buy);
 

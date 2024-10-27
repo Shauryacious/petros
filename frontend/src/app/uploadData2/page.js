@@ -93,7 +93,7 @@ const CreateUser = () => {
                     <div className="h-screen w-full flex items-center justify-center relative overflow-hidden bg-black">
                         <div className="relative z-10 p-8 bg-[#0d0d12] rounded-md shadow-lg w-full max-w-md border border-[#2a2a3d]">
                             <h1 className="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-b from-neutral-300 to-neutral-500 mb-8">
-                                Analyze Rock
+                                Classify your Rock
                             </h1>
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <input
