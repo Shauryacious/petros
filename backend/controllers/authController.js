@@ -72,15 +72,38 @@ exports.createPerson = async (req, res) => {
 
             // Handle the output from the Python script
             try {
-                // Split stdout into lines and ignore the first two lines
-                const outputLines = stdout.split('\n').slice(3).join('\n');
+                // Split stdout into lines and remove the first line
+                const outputLines = stdout.split('\n').slice(1); // Remove the first line
+                
+                // Extract the relevant second line (after removing the first)
+                if (outputLines.length < 2) {
+                    return res.status(400).json({
+                        status: 'fail',
+                        message: 'Insufficient output from Python script',
+                    });
+                }
+                
+                const secondLine = outputLines[0]; // This is now the original second line
+                const thirdLine = outputLines[1]; // This is now the original third line
+
+                // Extract the value after '1 ' in the second line
+                const startIndex = secondLine.indexOf('1') + 2; // +2 to skip '1 ' and space
+                const extractedValue = secondLine.substring(startIndex).trim(); // Extract everything after '1'
+
+                // Remove the third line by skipping it
+                const remainingOutputLines = outputLines.slice(2); // Skip the original third line
+                
+                // Join the remaining lines back into a single string
+                const finalOutput = remainingOutputLines.join('\n').trim();
                 
                 // Attempt to parse the remaining output as JSON
-                const jsonOutput = JSON.parse(outputLines); // Assuming the Python script outputs valid JSON
+                const jsonOutput = JSON.parse(finalOutput); // Assuming the remaining lines are valid JSON
+
                 return res.status(201).json({
                     status: 'success',
                     data: {
                         pythonOutput: jsonOutput, // Include output from Python
+                        extractedValue: extractedValue, // Include the extracted value
                     },
                 });
             } catch (parseError) {

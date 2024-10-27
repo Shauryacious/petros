@@ -20,6 +20,8 @@ const PdfGenerator = (props) => {
     html2pdf().set(options).from(componentRef.current).save();
   };
 
+  
+
   return (
     <>
       {/* Importing Poppins font */}
@@ -37,16 +39,31 @@ const PdfGenerator = (props) => {
             <h1 className="text-4xl font-bold mb-10 text-blue-500">Rock Sample Analysis Report</h1>
 
             {/* Introduction */}
+            {/* Introduction */}
             <div className="pdf-page mb-10">
               <h2 className="text-3xl font-semibold underline mb-6 text-gray-700">Introduction</h2>
               <p className="text-lg text-gray-700 mb-6 leading-relaxed">
                 This <span className="font-semibold">Rock Sample Analysis Report</span> presents a comprehensive
-                examination of mineral <span className="italic">distribution</span> and <span className="italic">composition</span> 
-                using image processing techniques. The analysis utilizes <span className="font-semibold">YOLO models</span> 
-                to segment mineral regions, quantify feature density through black spot (circle) detection, and provide detailed 
-                visual insights. A pie chart and scatter plot further reveal mineral composition and spatial distribution, 
+                examination of mineral <span className="italic">distribution</span> and <span className="italic">composition</span>
+                using image processing techniques. The analysis utilizes <span className="font-semibold">YOLO models </span>
+                 to segment mineral regions, quantify feature density through black spot (circle) detection, and provide detailed
+                visual insights. A pie chart and scatter plot further reveal mineral composition and spatial distribution,
                 forming the basis for advanced geological assessments.
               </p>
+
+              {/* Identified and Confidence Values Section */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center">
+                
+                    
+                  <span className="text-lg font-medium text-gray-800">Identified as: <span className='font-semibold'>{response.data.extractedValue}</span> </span>
+                </div>
+                <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center">
+              
+                   
+                  <span className="text-lg font-medium text-gray-800">Confidence Value: {response.data.pythonOutput.conf}</span>
+                </div>
+              </div>
 
               {response.data.pythonOutput.annotated_image && (
                 <figure className="border border-gray-200 rounded-lg shadow-md p-5">
@@ -58,6 +75,7 @@ const PdfGenerator = (props) => {
                   <figcaption className="text-md font-medium text-gray-600 mt-4">Figure 1: Annotated Rock Sample Image</figcaption>
                 </figure>
               )}
+
               <div className="math-box mt-6">
                 <MathJax.Provider>
                   <div className="text-lg text-gray-700">
@@ -66,6 +84,7 @@ const PdfGenerator = (props) => {
                 </MathJax.Provider>
               </div>
             </div>
+
 
             {/* Detected Spots */}
             {response.data.pythonOutput.spots_image && (
