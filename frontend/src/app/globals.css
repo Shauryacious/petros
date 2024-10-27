@@ -100,3 +100,24 @@ body {
     box-shadow: 2px 2px 40px rgba(255, 96, 96, 0.8);
   } /* Deep red */
 }
+.pdf-page {
+  page-break-inside: avoid; /* Prevent page break inside this section */
+  margin-bottom: 20px; /* Add some margin for spacing */
+}
+
+img {
+  max-width: 100%; /* Ensure images don't exceed the container width */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.math-box {
+  border: 2px solid #4f46e5; /* Indiglo color border */
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0; /* Adds space above and below the box */
+  background-color: #f8fafc; /* Light background for better contrast */
+}
+
+.pdf-page {
+  margin-bottom: 20px; /* Adds space between sections */
+}
