@@ -107,10 +107,11 @@ def main():
     # YOLO prediction
     def predict_image(model, img):
         results = model.predict(source=img, conf=0.25)  # Adjust confidence as needed
+        conf = results[0].boxes.conf[0].item()
         annotated_img = results[0].plot()
-        return annotated_img
+        return annotated_img,conf
 
-    annotated_img = predict_image(model, original_image)
+    annotated_img,confidence = predict_image(model, original_image)
 
     # Spot detection (circles)
     detected_circle_count, circles = detect_spots(original_image)
@@ -173,6 +174,7 @@ def main():
     json_output = {}
 
     # Save the annotated image as base64
+    json_output['conf'] = confidence
     json_output['annotated_image'] = compress_and_encode_image(annotated_img)
 
     # Save the spots detection image as base64
