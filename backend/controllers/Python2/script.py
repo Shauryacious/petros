@@ -78,7 +78,7 @@ def detect_spots(image):
 def draw_spots_on_image(image, circles):
     # Create a copy of the image to draw spots
     output_image = image.copy()
-    
+
     if circles is not None:
         for (x, y, r) in circles:
             # Draw the circle in the output image
@@ -188,32 +188,45 @@ def main():
     json_output['segmented_image'] = compress_and_encode_image(output_image)
 
     # Create plot for area percentages (bar chart)
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.bar([f"Region {i + 1}" for i in range(len(filtered_areas))],
-           filtered_area_percentages, color=[(r / 255, g / 255, b / 255) for r, g, b in colors])
-    ax.set_title("Percentage Area Occupied by Each Mineral Region")
-    ax.set_xlabel("Mineral Regions")
-    ax.set_ylabel("Percentage Area (%)")
-    ax.set_xticks(range(len(filtered_areas)))
-    ax.set_xticklabels([f"Region {i + 1}" for i in range(len(filtered_areas))], rotation=45)
+    fig_bar, ax_bar = plt.subplots(figsize=(10, 6))
+    ax_bar.bar([f"Region {i + 1}" for i in range(len(filtered_areas))],
+               filtered_area_percentages, color=[(r / 255, g / 255, b / 255) for r, g, b in colors])
+    ax_bar.set_title("Percentage Area Occupied by Each Mineral Region")
+    ax_bar.set_xlabel("Mineral Regions")
+    ax_bar.set_ylabel("Percentage Area (%)")
+    ax_bar.set_xticks(range(len(filtered_areas)))
+    ax_bar.set_xticklabels([f"Region {i + 1}" for i in range(len(filtered_areas))], rotation=45)
 
-    # Convert the plot to base64 and add to the JSON output
-    json_output['bar_chart'] = plot_to_base64(fig)
+    # Convert the bar chart to base64 and add to the JSON output
+    json_output['bar_chart'] = plot_to_base64(fig_bar)
 
-    # Close the plot to avoid memory leak
-    plt.close(fig)
+    # Close the bar chart to avoid memory leak
+    plt.close(fig_bar)
 
-    # Plot and convert the spot detection plot to base64
-    plt.figure(figsize=(6, 6))
-    plt.imshow(cv2.cvtColor(spots_image, cv2.COLOR_BGR2RGB))
-    plt.title(f"Detection of Spots - {detected_circle_count} circles found")
-    plt.axis("off")
+    # Pie chart for area percentages
+    fig_pie, ax_pie = plt.subplots()
+    ax_pie.pie(filtered_area_percentages, labels=[f"Region {i + 1}" for i in range(len(filtered_areas))],
+               colors=[(r / 255, g / 255, b / 255) for r, g, b in colors], autopct='%1.1f%%', startangle=140)
+    ax_pie.set_title("Pie Chart of Area Percentages")
 
-    fig_spots = plt.gcf()  # Get the current figure
-    json_output['spot_detection_plot'] = plot_to_base64(fig_spots)
+    # Convert the pie chart to base64 and add to the JSON output
+    json_output['pie_chart'] = plot_to_base64(fig_pie)
 
-    # Close the plot to avoid memory leak
-    plt.close(fig_spots)
+    # Close the pie chart to avoid memory leak
+    plt.close(fig_pie)
+
+    # Scatter plot for area sizes of each region
+    fig_scatter, ax_scatter = plt.subplots()
+    ax_scatter.scatter(range(len(filtered_areas)), filtered_areas, color='blue', alpha=0.5)
+    ax_scatter.set_title("Scatter Plot of Contour Areas")
+    ax_scatter.set_xlabel("Region Index")
+    ax_scatter.set_ylabel("Contour Area")
+
+    # Convert the scatter plot to base64 and add to the JSON output
+    json_output['scatter_plot'] = plot_to_base64(fig_scatter)
+
+    # Close the scatter plot to avoid memory leak
+    plt.close(fig_scatter)
 
     # Add the number of detected spots (circles) to the JSON output
     json_output['number_of_spots'] = detected_circle_count
