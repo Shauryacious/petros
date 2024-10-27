@@ -117,6 +117,30 @@ const PdfGenerator = (props) => {
               />
             </div>
           )}
+
+          {/* Display Pie Chart */}
+          {response.data.pythonOutput.pie_chart && (
+            <div className="pdf-page mb-6">
+              <h3 className="text-xl font-medium mb-2 text-gray-600">Pie Chart</h3>
+              <img
+                src={`data:image/png;base64,${response.data.pythonOutput.pie_chart}`}
+                alt="Pie Chart"
+                className="mx-auto border border-gray-300 rounded-lg shadow-sm w-1/2 h-auto"
+              />
+            </div>
+          )}
+
+          {/* Display Scatter Plot */}
+          {response.data.pythonOutput.scatter_plot && (
+            <div className="pdf-page mb-6">
+              <h3 className="text-xl font-medium mb-2 text-gray-600">Scatter Plot</h3>
+              <img
+                src={`data:image/png;base64,${response.data.pythonOutput.scatter_plot}`}
+                alt="Scatter Plot"
+                className="mx-auto border border-gray-300 rounded-lg shadow-sm w-1/2 h-auto"
+              />
+            </div>
+          )}
         </div>
       ) : (
         <p className="text-red-600 font-medium mt-4">No valid data available to display.</p>
