@@ -19,7 +19,7 @@ exports.detectObjects = (req, res) => {
         });
     }
 
-    const command = `python3 controllers/python/detect_yolo.py ${imagePath}`;
+    const command = `python3 controllers/python/script.py --image ${imagePath}`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -39,7 +39,8 @@ exports.detectObjects = (req, res) => {
         }
 
         try {
-            const detectedObjects = JSON.parse(stdout);
+            const outputLines = stdout.split('\n').slice(3).join('\n');
+            const detectedObjects = JSON.parse(outputLines);
 
             return res.status(200).json({
                 status: 'success',
