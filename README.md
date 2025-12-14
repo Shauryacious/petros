@@ -421,6 +421,8 @@ Potential improvements:
 
 ## 👥 Team
 
+![Team Photo](./images/Team.png)
+
 - **Arun Rathaur**
 - **Shaurya**
 - **Karan**
