@@ -1,7 +1,7 @@
 'use client';
 import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
-import MathJax from 'react-mathjax';
+import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 const PdfGenerator = (props) => {
   const { response } = props;
@@ -77,11 +77,11 @@ const PdfGenerator = (props) => {
               )}
 
               <div className="math-box mt-6">
-                <MathJax.Provider>
+                <MathJaxContext>
                   <div className="text-lg text-gray-700">
-                    <MathJax.Node formula={"\\text{Sample Area} = \\int_{a}^{b} A(x) \\, dx"} />
+                    <MathJax>{"\\[\\text{Sample Area} = \\int_{a}^{b} A(x) \\, dx\\]"}</MathJax>
                   </div>
-                </MathJax.Provider>
+                </MathJaxContext>
               </div>
             </div>
 
@@ -106,11 +106,11 @@ const PdfGenerator = (props) => {
                   <figcaption className="text-md font-medium text-gray-600 mt-4">Figure 2: Detected Spots in Sample</figcaption>
                 </figure>
                 <div className="math-box mt-6">
-                  <MathJax.Provider>
+                  <MathJaxContext>
                     <div className="text-lg text-gray-700">
-                      <MathJax.Node formula={"N_{spots} = \\sum_{i=1}^{n} 1_{i}"} />
+                      <MathJax>{"\\[N_{spots} = \\sum_{i=1}^{n} 1_{i}\\]"}</MathJax>
                     </div>
-                  </MathJax.Provider>
+                  </MathJaxContext>
                 </div>
               </div>
             )}
@@ -135,11 +135,11 @@ const PdfGenerator = (props) => {
                   <figcaption className="text-md font-medium text-gray-600 mt-4">Figure 3: Mineral Regions in Rock Sample</figcaption>
                 </figure>
                 <div className="math-box mt-6">
-                  <MathJax.Provider>
+                  <MathJaxContext>
                     <div className="text-lg text-gray-700">
-                      <MathJax.Node formula={"A_{mineral} = \\int_{R} \\rho_{mineral}(x,y) \\, dx \\, dy"} />
+                      <MathJax>{"\\[A_{mineral} = \\int_{R} \\rho_{mineral}(x,y) \\, dx \\, dy\\]"}</MathJax>
                     </div>
-                  </MathJax.Provider>
+                  </MathJaxContext>
                 </div>
               </div>
             )}
@@ -162,11 +162,11 @@ const PdfGenerator = (props) => {
                   <figcaption className="text-md font-medium text-gray-600 mt-4">Figure 4: Bar Chart of Mineral Area Percentages</figcaption>
                 </figure>
                 <div className="math-box mt-6">
-                  <MathJax.Provider>
+                  <MathJaxContext>
                     <div className="text-lg text-gray-700">
-                      <MathJax.Node formula={"P_{mineral} = \\frac{A_{mineral}}{A_{total}} \\times 100\\%"} />
+                      <MathJax>{"\\[P_{mineral} = \\frac{A_{mineral}}{A_{total}} \\times 100\\%\\]"}</MathJax>
                     </div>
-                  </MathJax.Provider>
+                  </MathJaxContext>
                 </div>
               </div>
             )}
@@ -209,11 +209,11 @@ const PdfGenerator = (props) => {
                   <figcaption className="text-md font-medium text-gray-600 mt-4">Figure 6: Scatter Plot of Contour Areas</figcaption>
                 </figure>
                 <div className="math-box mt-6">
-                  <MathJax.Provider>
+                  <MathJaxContext>
                     <div className="text-lg text-gray-700">
-                      <MathJax.Node formula={"A_{scatter} = \\frac{Area_{contour}}{n}"} />
+                      <MathJax>{"\\[A_{scatter} = \\frac{Area_{contour}}{n}\\]"}</MathJax>
                     </div>
-                  </MathJax.Provider>
+                  </MathJaxContext>
                 </div>
               </div>
             )}

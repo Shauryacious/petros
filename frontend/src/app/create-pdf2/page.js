@@ -1,7 +1,7 @@
 'use client';
 import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
-import MathJax from 'react-mathjax';
+import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 const PdfGenerator2 = (props) => {
   const { response } = props;
@@ -20,7 +20,7 @@ const PdfGenerator2 = (props) => {
     html2pdf().set(options).from(componentRef.current).save();
   };
 
-  
+
 
   return (
     <>
@@ -31,7 +31,7 @@ const PdfGenerator2 = (props) => {
 
       <div
         className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50"
-        style={{  fontFamily: 'Poppins, sans-serif' }}
+        style={{ fontFamily: 'Poppins, sans-serif' }}
       >
         {isValidResponse ? (
           <div ref={componentRef} className="bg-white p-10 rounded-lg shadow-lg w-full max-w-4xl text-center space-y-10">
@@ -46,7 +46,7 @@ const PdfGenerator2 = (props) => {
                 This <span className="font-semibold">Rock Sample Analysis Report</span> presents a comprehensive
                 examination of mineral <span className="italic">distribution</span> and <span className="italic">composition</span>
                 using image processing techniques. The analysis utilizes <span className="font-semibold">YOLO models </span>
-                 to segment mineral regions, quantify feature density through black spot (circle) detection, and provide detailed
+                to segment mineral regions, quantify feature density through black spot (circle) detection, and provide detailed
                 visual insights. A pie chart and scatter plot further reveal mineral composition and spatial distribution,
                 forming the basis for advanced geological assessments.
               </p>
@@ -54,8 +54,8 @@ const PdfGenerator2 = (props) => {
               {/* Identified and Confidence Values Section */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gray-100 p-4 rounded-lg shadow-md flex items-center">
-                
-                    
+
+
                   <span className="text-lg font-medium text-gray-800">Identified as: <span className='font-semibold'>{response.data.extractedValue}</span> </span>
                 </div>
               </div>
@@ -72,11 +72,11 @@ const PdfGenerator2 = (props) => {
               )}
 
               <div className="math-box mt-6">
-                <MathJax.Provider>
+                <MathJaxContext>
                   <div className="text-lg text-gray-700">
-                    <MathJax.Node formula={"\\text{Sample Area} = \\int_{a}^{b} A(x) \\, dx"} />
+                    <MathJax>{"\\[\\text{Sample Area} = \\int_{a}^{b} A(x) \\, dx\\]"}</MathJax>
                   </div>
-                </MathJax.Provider>
+                </MathJaxContext>
               </div>
             </div>
 
@@ -85,8 +85,8 @@ const PdfGenerator2 = (props) => {
             <div className="pdf-page mb-10">
               <h2 className="text-3xl font-semibold underline mb-6 text-gray-700">Conclusion</h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                This analysis provides an in-depth evaluation of mineral regions and compositional ratios, revealing critical 
-                insights into the rock's geological makeup. Identified spots represent localized mineral variations, suggesting 
+                This analysis provides an in-depth evaluation of mineral regions and compositional ratios, revealing critical
+                insights into the rock's geological makeup. Identified spots represent localized mineral variations, suggesting
                 potential structural irregularities that warrant further study.
               </p>
             </div>

@@ -4,6 +4,8 @@ A comprehensive rock classification and analysis platform that uses advanced AI/
 
 ## 🎯 Project Overview
 
+![Project Screenshot](./images/dashboard.png)
+
 Pétros Analysis is a full-stack web application designed to assist geologists, researchers, and enthusiasts in identifying and analyzing rock types quickly and accurately. The platform utilizes YOLO (You Only Look Once) deep learning models for rock classification and provides comprehensive analysis including:
 
 - Rock type classification
